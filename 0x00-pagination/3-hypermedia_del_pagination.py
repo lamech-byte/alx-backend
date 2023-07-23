@@ -88,7 +88,6 @@ class Server:
             return {}
 
         start_index, end_index = index_range(index + 1, page_size)
-      # Adding 1 to index for 1-based pagination
         data = [self.indexed_dataset()[i] for i in range(
           start_index, min(end_index, total_items)
         )]
