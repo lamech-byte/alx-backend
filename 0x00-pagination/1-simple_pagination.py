@@ -51,18 +51,22 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
-        Return the appropriate page of the dataset (i.e. the correct list of rows)
+        Return the appropriate page of the dataset
+        (i.e. the correct list of rows)
         based on the given pagination parameters.
 
         Args:
             page (int, optional): Page number (1-indexed). Defaults to 1.
-            page_size (int, optional): Number of items per page. Defaults to 10.
+            page_size (int, optional): Number of
+            items per page. Defaults to 10.
 
         Returns:
             List[List]: The list of rows corresponding to the requested page.
         """
-        assert isinstance(page, int) and page > 0, "Page must be a positive integer."
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
+        assert isinstance(page, int) and page > 0,
+        "Page must be a positive integer."
+        assert isinstance(page_size, int) and page_size > 0,
+        "Page size must be a positive integer."
 
         start_index, end_index = index_range(page, page_size)
         return self.dataset()[start_index:end_index]
@@ -90,4 +94,3 @@ if __name__ == "__main__":
     print(server.get_page(1, 3))
     print(server.get_page(3, 2))
     print(server.get_page(3000, 100))
-
