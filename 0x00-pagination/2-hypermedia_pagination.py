@@ -53,35 +53,45 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
-        Return the appropriate page of the dataset (i.e. the correct list of rows)
+        Return the appropriate page of
+        the dataset (i.e. the correct list of rows)
         based on the given pagination parameters.
 
         Args:
             page (int, optional): Page number (1-indexed). Defaults to 1.
-            page_size (int, optional): Number of items per page. Defaults to 10.
+            page_size (int, optional): Number of
+            items per page. Defaults to 10.
 
         Returns:
             List[List]: The list of rows corresponding to the requested page.
         """
-        assert isinstance(page, int) and page > 0, "Page must be a positive integer."
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
+        assert isinstance(page, int) and page > 0, """Page must be a
+        positive integer."""
+        assert isinstance(page_size, int) and page_size > 0, """Page
+        size must be a positive integer."""
 
         start_index, end_index = index_range(page, page_size)
         return self.dataset()[start_index:end_index]
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Union[int, List[List], None]]:
+    def get_hyper(
+        self, page: int = 1,
+        page_size: int = 10) -> Dict[str, Union[int, List[List], None]]:
         """
-        Return a dictionary containing the hypermedia information for the requested page.
+        Return a dictionary containing the
+        hypermedia information for the requested page.
 
         Args:
             page (int, optional): Page number (1-indexed). Defaults to 1.
-            page_size (int, optional): Number of items per page. Defaults to 10.
+            page_size (int, optional): Number of items per
+            page. Defaults to 10.
 
         Returns:
             Dict: A dictionary containing hypermedia information.
         """
-        assert isinstance(page, int) and page > 0, "Page must be a positive integer."
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
+        assert isinstance(page, int) and page > 0, """Page must be a
+        positive integer."""
+        assert isinstance(page_size, int) and page_size > 0, """Page
+        size must be a positive integer."""
 
         data = self.get_page(page, page_size)
         total_pages = math.ceil(len(self.dataset()) / page_size)
