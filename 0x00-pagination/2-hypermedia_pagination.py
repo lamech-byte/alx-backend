@@ -74,8 +74,8 @@ class Server:
         return self.dataset()[start_index:end_index]
 
     def get_hyper(
-        self, page: int = 1,
-        page_size: int = 10) -> Dict[str, Union[int, List[List], None]]:
+        self, page: int = 1, page_size: int = 10
+    ) -> Dict[str, Union[int, List[List], None]]:
         """
         Return a dictionary containing the
         hypermedia information for the requested page.
