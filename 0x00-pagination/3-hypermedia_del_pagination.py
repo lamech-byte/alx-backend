@@ -70,7 +70,8 @@ class Server:
         Args:
             index (int, optional): The start index of the return page.
             Defaults to None.
-            page_size (int, optional): Number of items per page. Defaults to 10.
+            page_size (int, optional): Number of items per page. Defaults
+            to 10.
 
         Returns:
             Dict: A dictionary containing hypermedia information.
