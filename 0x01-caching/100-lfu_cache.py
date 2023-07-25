@@ -4,24 +4,24 @@
 """
 
 from base_caching import BaseCaching
-
+from collections import defaultdict
 
 class LFUCache(BaseCaching):
     """ LFUCache class that inherits from BaseCaching """
 
+    
     def __init__(self):
         """ Initialize """
         super().__init__()
-        self.frequency = {}
+        self.frequency = defaultdict(int)
         self.min_frequency = 0
         self.order = []
 
     def update_frequency(self, key):
         """ Update frequency of the key """
-        if key in self.frequency:
-            self.frequency[key] += 1
-        else:
-            self.frequency[key] = 1
+        self.frequency[key] += 1
+        if self.frequency[key] > self.min_frequency:
+            self.min_frequency = self.frequency[key]
 
     def put(self, key, item):
         """ Add an item in the cache """
@@ -31,24 +31,14 @@ class LFUCache(BaseCaching):
                     k for k, v in self.frequency.items()
                     if v == self.min_frequency
                 ]
-                if len(lfu_keys) == 1:
-                    discarded_key = lfu_keys[0]
-                else:
-                    lru_key = next((
-                        k for k in self.order if k in lfu_keys
-                    ), None)
-                    discarded_key = lru_key
+                for k in self.order[:]:
+                    if k in lfu_keys:
+                        self.order.remove(k)
+                        del self.cache_data[k]
+                        del self.frequency[k]
+                        print("DISCARD: {}".format(k))
 
-                if discarded_key is not None:
-                    del self.cache_data[discarded_key]
-                    del self.frequency[discarded_key]
-                    self.order.remove(discarded_key)
-                    print("DISCARD: {}".format(discarded_key))
-
-                if len(self.cache_data) > 0:
-                    self.min_frequency = min(self.frequency.values())
-                else:
-                    self.min_frequency = 0
+                self.min_frequency += 1
 
             self.cache_data[key] = item
             self.update_frequency(key)
