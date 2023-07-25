@@ -5,6 +5,7 @@
 
 from base_caching import BaseCaching
 
+
 class LIFOCache(BaseCaching):
     """ LIFOCache class that inherits from BaseCaching """
 
