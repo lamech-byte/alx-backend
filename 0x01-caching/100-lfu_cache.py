@@ -26,7 +26,9 @@ class LFUCache(BaseCaching):
         """ Add an item in the cache """
         if key is not None and item is not None:
             if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                lfu_keys = [k for k, v in self.frequency.items() if v == self.min_frequency]
+                lfu_keys = [
+                    k for k, v in self.frequency.items() if v == self.min_frequency
+                ]
                 if len(lfu_keys) == 1:
                     del self.cache_data[lfu_keys[0]]
                     del self.frequency[lfu_keys[0]]
