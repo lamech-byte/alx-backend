@@ -19,39 +19,29 @@ class LFUCache(BaseCaching):
     def update_frequency(self, key):
         """ Update frequency of the key """
         self.frequency[key] += 1
-        frequency = self.frequency[key]
-        if frequency - 1 in self.frequency_of_frequency:
-            self.frequency_of_frequency[frequency - 1].remove(key)
-
-        if frequency not in self.frequency_of_frequency:
-            self.frequency_of_frequency[frequency] = []
-
-        self.frequency_of_frequency[frequency].append(key)
-
-        if not self.frequency_of_frequency[self.min_frequency]:
-            del self.frequency_of_frequency[self.min_frequency]
-
-        self.min_frequency = frequency
+        if self.frequency[key] > self.min_frequency:
+            self.min_frequency = self.frequency[key]
 
     def put(self, key, item):
         """ Add an item in the cache """
         if key is not None and item is not None:
             if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                while not self.frequency_of_frequency[self.min_frequency]:
-                    self.min_frequency += 1
+                lfu_keys = [
+                    k for k, v in self.frequency.items()
+                    if v == self.min_frequency
+                ]
+                for k in self.order[:]:
+                    if k in lfu_keys:
+                        self.order.remove(k)
+                        del self.cache_data[k]
+                        del self.frequency[k]
+                        print("DISCARD: {}".format(k))
 
-                lfu_keys = self.frequency_of_frequency[self.min_frequency]
-
-                if len(lfu_keys) == 1:
-                    discarded_key = lfu_keys[0]
-                else:
-                    discarded_key = lfu_keys.pop(0)
-
-                del self.cache_data[discarded_key]
-                self.frequency.pop(discarded_key)
+                self.min_frequency += 1
 
             self.cache_data[key] = item
             self.update_frequency(key)
+            self.order.append(key)
 
     def get(self, key):
         """ Get an item by key """
