@@ -62,38 +62,40 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(
-      self, index: int = None, page_size: int = 10
-    ) -> Dict:
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """
-        Return a dictionary containing the hypermedia information
-        for the requested index.
+        Return a dictionary containing the hypermedia information for the
+        requested index.
 
         Args:
-            index (int, optional): The start index of the return
-            page. Defaults to None.
-            page_size (int, optional): Number of items per page.
-            Defaults to 10.
+            index (int, optional): The start index of the return page.
+            Defaults to None.
+            page_size (int, optional): Number of items per page. Defaults to 10.
 
         Returns:
             Dict: A dictionary containing hypermedia information.
         """
-        assert index is None or isinstance(index, int) and index >= 0, """Index
-        must be a non-negative integer."""
-        assert isinstance(page_size, int) and page_size > 0, """Page size
-        must be a positive integer."""
+        assert index is None or isinstance(index, int) and index >= 0, """
+        Index must be a non-negative integer."""
+        assert isinstance(page_size, int) and page_size > 0, """Page
+        size must be a positive integer."""
 
         total_items = len(self.indexed_dataset())
         if index is None or index >= total_items:
             return {}
 
-        start_index, end_index = index_range(index + 1, page_size)
-        # Adding 1 to index for 1-based pagination
-        data = [self.indexed_dataset()[i] for i in range(
-          start_index, min(end_index, total_items)
-        )]
+        data = []
+        for i in range(index, total_items):
+            if len(data) == page_size:
+                break
+            if i in self.indexed_dataset():
+                data.append(self.indexed_dataset()[i])
 
-        next_index = end_index if end_index < total_items else None
+        next_index = None
+        for i in range(index + 1, total_items):
+            if i in self.indexed_dataset():
+                next_index = i
+                break
 
         return {
             "index": index,
