@@ -5,6 +5,7 @@
 
 from base_caching import BaseCaching
 
+
 class MRUCache(BaseCaching):
     """ MRUCache class that inherits from BaseCaching """
 
