@@ -5,7 +5,6 @@
 
 from base_caching import BaseCaching
 
-
 class LFUCache(BaseCaching):
     """ LFUCache class that inherits from BaseCaching """
 
@@ -14,6 +13,7 @@ class LFUCache(BaseCaching):
         super().__init__()
         self.frequency = {}
         self.min_frequency = 0
+        self.order = []
 
     def update_frequency(self, key):
         """ Update frequency of the key """
@@ -26,22 +26,19 @@ class LFUCache(BaseCaching):
         """ Add an item in the cache """
         if key is not None and item is not None:
             if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                lfu_keys = [k for k, v in self.frequency.items()
-                            if v == self.min_frequency]
+                lfu_keys = [
+                    k for k, v in self.frequency.items()
+                    if v == self.min_frequency
+                ]
                 if len(lfu_keys) == 1:
-                    del self.cache_data[lfu_keys[0]]
-                    del self.frequency[lfu_keys[0]]
-                    print("DISCARD: {}".format(lfu_keys[0]))
+                    discarded_key = lfu_keys[0]
                 else:
-                    lru_key = None
-                    for k in self.order:
-                        if k in lfu_keys:
-                            lru_key = k
-                            break
-                    del self.cache_data[lru_key]
-                    del self.frequency[lru_key]
-                    self.order.remove(lru_key)
-                    print("DISCARD: {}".format(lru_key))
+                    lru_key = next(k for k in self.order if k in lfu_keys)
+                    discarded_key = lru_key
+                del self.cache_data[discarded_key]
+                del self.frequency[discarded_key]
+                self.order.remove(discarded_key)
+                print("DISCARD: {}".format(discarded_key))
             self.cache_data[key] = item
             self.update_frequency(key)
             self.order.append(key)
