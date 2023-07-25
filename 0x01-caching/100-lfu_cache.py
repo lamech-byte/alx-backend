@@ -34,7 +34,9 @@ class LFUCache(BaseCaching):
                 if len(lfu_keys) == 1:
                     discarded_key = lfu_keys[0]
                 else:
-                    lru_key = next((k for k in self.order if k in lfu_keys), None)
+                    lru_key = next((
+                        k for k in self.order if k in lfu_keys
+                    ), None)
                     discarded_key = lru_key
                 del self.cache_data[discarded_key]
                 self.frequency[discarded_key] = 0
