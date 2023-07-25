@@ -9,7 +9,6 @@ from collections import defaultdict
 
 class LFUCache(BaseCaching):
     """ LFUCache class that inherits from BaseCaching """
-    
     def __init__(self):
         """ Initialize """
         super().__init__()
