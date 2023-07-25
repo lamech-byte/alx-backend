@@ -5,6 +5,7 @@
 
 from base_caching import BaseCaching
 
+
 class LFUCache(BaseCaching):
     """ LFUCache class that inherits from BaseCaching """
 
