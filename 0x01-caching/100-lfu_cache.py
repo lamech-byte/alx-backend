@@ -34,16 +34,18 @@ class LFUCache(BaseCaching):
                 if len(lfu_keys) == 1:
                     discarded_key = lfu_keys[0]
                 else:
-                    lru_key = next(k for k in self.order if k in lfu_keys)
+                    lru_key = next((k for k in self.order if k in lfu_keys), None)
                     discarded_key = lru_key
                 del self.cache_data[discarded_key]
-                del self.frequency[discarded_key]
+                self.frequency[discarded_key] = 0
                 self.order.remove(discarded_key)
                 print("DISCARD: {}".format(discarded_key))
+                self.min_frequency = 1
+
             self.cache_data[key] = item
             self.update_frequency(key)
             self.order.append(key)
-            self.min_frequency = 1
+            self.min_frequency = min(self.frequency.values())
 
     def get(self, key):
         """ Get an item by key """
