@@ -38,11 +38,13 @@ class LFUCache(BaseCaching):
                         k for k in self.order if k in lfu_keys
                     ), None)
                     discarded_key = lru_key
-                del self.cache_data[discarded_key]
-                self.frequency[discarded_key] = 0
-                self.order.remove(discarded_key)
-                print("DISCARD: {}".format(discarded_key))
-                self.min_frequency = 1
+
+                if discarded_key is not None:
+                    del self.cache_data[discarded_key]
+                    del self.frequency[discarded_key]
+                    self.order.remove(discarded_key)
+                    print("DISCARD: {}".format(discarded_key))
+                    self.min_frequency = 1
 
             self.cache_data[key] = item
             self.update_frequency(key)
