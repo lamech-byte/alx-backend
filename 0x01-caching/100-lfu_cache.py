@@ -6,9 +6,9 @@
 from base_caching import BaseCaching
 from collections import defaultdict
 
+
 class LFUCache(BaseCaching):
     """ LFUCache class that inherits from BaseCaching """
-
     
     def __init__(self):
         """ Initialize """
