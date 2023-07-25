@@ -4,6 +4,7 @@
 """
 
 from base_caching import BaseCaching
+from collections import defaultdict
 
 
 class LFUCache(BaseCaching):
@@ -11,17 +12,13 @@ class LFUCache(BaseCaching):
     def __init__(self):
         """ Initialize """
         super().__init__()
-        self.frequency = {}  # Dictionary to store the frequency of each key
-        self.frequency_of_frequency = {}  # Dictionary to store
+        self.frequency = defaultdict(int)
         self.min_frequency = 0
+        self.order = []
 
     def update_frequency(self, key):
         """ Update frequency of the key """
-        if key in self.frequency:
-            self.frequency[key] += 1
-        else:
-            self.frequency[key] = 1
-
+        self.frequency[key] += 1
         frequency = self.frequency[key]
         if frequency - 1 in self.frequency_of_frequency:
             self.frequency_of_frequency[frequency - 1].remove(key)
@@ -32,7 +29,9 @@ class LFUCache(BaseCaching):
         self.frequency_of_frequency[frequency].append(key)
 
         if not self.frequency_of_frequency[self.min_frequency]:
-            self.min_frequency += 1
+            del self.frequency_of_frequency[self.min_frequency]
+
+        self.min_frequency = frequency
 
     def put(self, key, item):
         """ Add an item in the cache """
