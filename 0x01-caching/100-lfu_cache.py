@@ -44,12 +44,15 @@ class LFUCache(BaseCaching):
                     del self.frequency[discarded_key]
                     self.order.remove(discarded_key)
                     print("DISCARD: {}".format(discarded_key))
-                    self.min_frequency = 1
+
+                if len(self.cache_data) > 0:
+                    self.min_frequency = min(self.frequency.values())
+                else:
+                    self.min_frequency = 0
 
             self.cache_data[key] = item
             self.update_frequency(key)
             self.order.append(key)
-            self.min_frequency = min(self.frequency.values())
 
     def get(self, key):
         """ Get an item by key """
