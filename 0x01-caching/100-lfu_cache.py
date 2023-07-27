@@ -9,6 +9,7 @@ from collections import defaultdict
 
 class LFUCache(BaseCaching):
     """ LFUCache class that inherits from BaseCaching """
+
     def __init__(self):
         """ Initialize """
         super().__init__()
@@ -30,14 +31,11 @@ class LFUCache(BaseCaching):
                     k for k, v in self.frequency.items()
                     if v == self.min_frequency
                 ]
-                for k in self.order[:]:
-                    if k in lfu_keys:
-                        self.order.remove(k)
-                        del self.cache_data[k]
-                        del self.frequency[k]
-                        print("DISCARD: {}".format(k))
-
-                self.min_frequency += 1
+                lru_key = next(k for k in self.order if k in lfu_keys)
+                self.order.remove(lru_key)
+                del self.cache_data[lru_key]
+                del self.frequency[lru_key]
+                print("DISCARD: {}".format(lru_key))
 
             self.cache_data[key] = item
             self.update_frequency(key)
