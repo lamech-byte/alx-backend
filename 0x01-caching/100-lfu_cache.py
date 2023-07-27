@@ -8,7 +8,7 @@ from collections import defaultdict
 
 
 class LFUCache(BaseCaching):
-    """ LFUCache class that inherits from BaseCaching. """
+    """ LFUCache class that inherits from BaseCaching """
 
     def __init__(self):
         """ Initialize """
@@ -31,17 +31,20 @@ class LFUCache(BaseCaching):
                     k for k, v in self.frequency.items()
                     if v == self.min_frequency
                 ]
+
                 if not lfu_keys:
                     # In case all keys are already removed from the cache
                     lfu_keys = self.order
-                    lru_key = next(k for k in self.order if k in lfu_keys)
-                    self.order.remove(lru_key)
-                    del self.cache_data[lru_key]
-                    del self.frequency[lru_key]
-                    print("DISCARD: {}".format(lru_key))
-                    self.cache_data[key] = item
-                    self.update_frequency(key)
-                    self.order.append(key)
+
+                lru_key = next(k for k in self.order if k in lfu_keys)
+                self.order.remove(lru_key)
+                del self.cache_data[lru_key]
+                del self.frequency[lru_key]
+                print("DISCARD: {}".format(lru_key))
+
+            self.cache_data[key] = item
+            self.update_frequency(key)
+            self.order.append(key)
 
     def get(self, key):
         """ Get an item by key """
