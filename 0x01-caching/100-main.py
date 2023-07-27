@@ -6,6 +6,9 @@ LFUCache = __import__('100-lfu_cache').LFUCache
 
 my_cache = LFUCache()
 
+print("Current cache:")
+my_cache.print_cache()
+
 my_cache.put("A", "Hello")
 my_cache.put("B", "World")
 my_cache.put("C", "Holberton")
