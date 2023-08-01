@@ -19,7 +19,8 @@ users = {
 
 
 def get_user():
-    """Return the user dictionary based on the 'login_as' parameter or None if not found."""
+    """Return the user dictionary based on
+    the 'login_as' parameter or None if not found."""
     user_id = request.args.get('login_as', type=int)
     if user_id in users:
         return users[user_id]
@@ -59,7 +60,8 @@ def get_timezone():
 
 @app.before_request
 def before_request():
-    """Set the global 'g.user' and 'g.timezone' variables for templates to access."""
+    """Set the global 'g.user' and 'g.timezone'
+    variables for templates to access."""
     g.user = get_user()
     g.timezone = get_timezone()
 
