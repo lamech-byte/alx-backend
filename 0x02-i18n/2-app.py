@@ -16,6 +16,7 @@ class Config:
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
+
 app.config.from_object(Config)
 
 
@@ -28,7 +29,9 @@ def get_locale():
 @app.route('/')
 def index():
     """Renders the index.html template with the specified content."""
-    return render_template('2-index.html', title="Welcome to Holberton", header="Hello world")
+    return render_template(
+        '2-index.html', title="Welcome to Holberton", header="Hello world"
+    )
 
 
 if __name__ == '__main__':
