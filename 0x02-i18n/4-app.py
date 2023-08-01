@@ -16,6 +16,7 @@ class Config:
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
+
 app.config.from_object(Config)
 
 
@@ -23,24 +24,30 @@ app.config.from_object(Config)
 def get_locale():
     """Determine the best-matching language for the user.
 
-    If the `locale` parameter is provided in the request's query string and is a
+    If the `locale` parameter is provided in the request's query
+    string and is a
     supported locale, return it. Otherwise, use the default behavior.
     """
-    if 'locale' in request.args and request.args['locale'] in app.config['LANGUAGES']:
+    if 'locale' in request.args and request.args[
+    'locale'
+    ] in app.config['LANGUAGES']:
         return request.args['locale']
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.before_request
 def before_request():
-    """Set the global `g.locale` variable for templates to access the current locale."""
+    """Set the global `g.locale` variable for templates
+    to access the current locale."""
     g.locale = str(get_locale())
 
 
 @app.route('/')
 def index():
     """Renders the index.html template with the translated content."""
-    return render_template('4-index.html', title=_("home_title"), header=_("home_header"))
+    return render_template(
+        '4-index.html', title=_("home_title"), header=_("home_header")
+    )
 
 
 if __name__ == '__main__':
