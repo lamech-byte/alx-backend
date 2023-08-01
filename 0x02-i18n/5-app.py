@@ -19,7 +19,8 @@ users = {
 
 
 def get_user():
-    """Return the user dictionary based on the 'login_as' parameter or None if not found."""
+    """Return the user dictionary based on
+    the 'login_as' parameter or None if not found."""
     user_id = request.args.get('login_as', type=int)
     if user_id in users:
         return users[user_id]
@@ -28,7 +29,8 @@ def get_user():
 
 @app.before_request
 def before_request():
-    """Set the global 'g.user' variable for templates to access the current user."""
+    """Set the global 'g.user' variable for templates
+    to access the current user."""
     g.user = get_user()
 
 
